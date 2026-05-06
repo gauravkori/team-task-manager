@@ -11,10 +11,17 @@ const router = express.Router();
 // REGISTER
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+
+    const {
+      name,
+      email,
+      password,
+      role,
+    } = req.body;
 
     // Check existing user
-    const existingUser = await User.findOne({ email });
+    const existingUser =
+      await User.findOne({ email });
 
     if (existingUser) {
       return res.status(400).json({
@@ -23,7 +30,8 @@ router.post("/register", async (req, res) => {
     }
 
     // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword =
+      await bcrypt.hash(password, 10);
 
     // Create user
     const user = await User.create({
@@ -34,11 +42,13 @@ router.post("/register", async (req, res) => {
     });
 
     res.status(201).json({
-      message: "User registered successfully",
+      message:
+        "User registered successfully",
       user,
     });
 
   } catch (error) {
+
     res.status(500).json({
       message: error.message,
     });
@@ -49,10 +59,15 @@ router.post("/register", async (req, res) => {
 // LOGIN
 router.post("/login", async (req, res) => {
   try {
-    const { email, password } = req.body;
+
+    const {
+      email,
+      password,
+    } = req.body;
 
     // Find user
-    const user = await User.findOne({ email });
+    const user =
+      await User.findOne({ email });
 
     if (!user) {
       return res.status(400).json({
@@ -61,7 +76,11 @@ router.post("/login", async (req, res) => {
     }
 
     // Compare password
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch =
+      await bcrypt.compare(
+        password,
+        user.password
+      );
 
     if (!isMatch) {
       return res.status(400).json({
@@ -75,7 +94,7 @@ router.post("/login", async (req, res) => {
         id: user._id,
         role: user.role,
       },
-      "secretkey",
+      process.env.JWT_SECRET,
       {
         expiresIn: "7d",
       }
@@ -87,20 +106,27 @@ router.post("/login", async (req, res) => {
     });
 
   } catch (error) {
+
     res.status(500).json({
       message: error.message,
     });
   }
 });
 
+
 // PROTECTED ROUTE
-router.get("/profile", authMiddleware, async (req, res) => {
+router.get(
+  "/profile",
+  authMiddleware,
+  async (req, res) => {
 
-  res.json({
-    message: "Protected route accessed",
-    user: req.user,
-  });
+    res.json({
+      message:
+        "Protected route accessed",
+      user: req.user,
+    });
 
-});
+  }
+);
 
 module.exports = router;
