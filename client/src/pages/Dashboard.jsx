@@ -43,7 +43,7 @@ function Dashboard() {
     try {
 
       const res = await axios.get(
-        "http://localhost:5000/api/tasks",
+        `${import.meta.env.VITE_API_URL}/api/auth/register`,
         {
           headers: {
             Authorization: token,
@@ -67,7 +67,7 @@ function Dashboard() {
     try {
 
       await axios.put(
-        `http://localhost:5000/api/tasks/${taskId}`,
+        `${import.meta.env.VITE_API_URL}/api/auth/register`,
         { status },
         {
           headers: {
