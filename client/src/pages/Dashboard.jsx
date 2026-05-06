@@ -11,6 +11,16 @@ function Dashboard() {
 
   const [tasks, setTasks] = useState([]);
 
+  const [users, setUsers] = useState([]);
+
+  const [taskData, setTaskData] =
+    useState({
+      title: "",
+      description: "",
+      assignedTo: "",
+      dueDate: "",
+    });
+
   // TASK STATS
   const totalTasks = tasks.length;
 
@@ -36,6 +46,8 @@ function Dashboard() {
 
     fetchTasks();
 
+    fetchUsers();
+
   }, []);
 
   // FETCH TASKS
@@ -43,7 +55,7 @@ function Dashboard() {
     try {
 
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/auth/register`,
+        `${import.meta.env.VITE_API_URL}/api/tasks`,
         {
           headers: {
             Authorization: token,
@@ -59,6 +71,75 @@ function Dashboard() {
     }
   };
 
+  // FETCH USERS
+  const fetchUsers = async () => {
+    try {
+
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/users`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+
+      setUsers(res.data);
+
+    } catch (error) {
+
+      console.log(error);
+    }
+  };
+
+  // CREATE TASK
+  const createTask = async (e) => {
+
+    e.preventDefault();
+
+    try {
+
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/tasks`,
+        {
+          title: taskData.title,
+          description:
+            taskData.description,
+          dueDate: taskData.dueDate,
+
+          // TEMP PROJECT ID
+          project:
+            "69fad9a02d543f60fb8c36a7",
+
+          assignedTo:
+            taskData.assignedTo,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+
+      alert("Task Created");
+
+      setTaskData({
+        title: "",
+        description: "",
+        assignedTo: "",
+        dueDate: "",
+      });
+
+      fetchTasks();
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert("Task creation failed");
+    }
+  };
+
   // UPDATE TASK STATUS
   const updateStatus = async (
     taskId,
@@ -67,7 +148,7 @@ function Dashboard() {
     try {
 
       await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/auth/register`,
+        `${import.meta.env.VITE_API_URL}/api/tasks/${taskId}`,
         { status },
         {
           headers: {
@@ -103,7 +184,8 @@ function Dashboard() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+          boxShadow:
+            "0 0 10px rgba(0,0,0,0.1)",
         }}
       >
         <div>
@@ -134,6 +216,122 @@ function Dashboard() {
       </div>
 
 
+      {/* CREATE TASK */}
+      {
+        user?.role === "admin" && (
+          <form
+            onSubmit={createTask}
+            style={{
+              background: "white",
+              padding: "20px",
+              borderRadius: "10px",
+              marginBottom: "30px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "15px",
+              boxShadow:
+                "0 0 10px rgba(0,0,0,0.1)",
+            }}
+          >
+            <h2>Create Task</h2>
+
+            <input
+              type="text"
+              placeholder="Task title"
+              value={taskData.title}
+              onChange={(e) =>
+                setTaskData({
+                  ...taskData,
+                  title: e.target.value,
+                })
+              }
+              required
+              style={{
+                padding: "10px",
+              }}
+            />
+
+            <textarea
+              placeholder="Description"
+              value={
+                taskData.description
+              }
+              onChange={(e) =>
+                setTaskData({
+                  ...taskData,
+                  description:
+                    e.target.value,
+                })
+              }
+              required
+              style={{
+                padding: "10px",
+              }}
+            />
+
+            <input
+              type="date"
+              value={taskData.dueDate}
+              onChange={(e) =>
+                setTaskData({
+                  ...taskData,
+                  dueDate:
+                    e.target.value,
+                })
+              }
+              required
+              style={{
+                padding: "10px",
+              }}
+            />
+
+            <select
+              value={
+                taskData.assignedTo
+              }
+              onChange={(e) =>
+                setTaskData({
+                  ...taskData,
+                  assignedTo:
+                    e.target.value,
+                })
+              }
+              required
+              style={{
+                padding: "10px",
+              }}
+            >
+              <option value="">
+                Select User
+              </option>
+
+              {users.map((u) => (
+                <option
+                  key={u._id}
+                  value={u._id}
+                >
+                  {u.name}
+                </option>
+              ))}
+            </select>
+
+            <button
+              type="submit"
+              style={{
+                padding: "10px",
+                background: "black",
+                color: "white",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              Create Task
+            </button>
+          </form>
+        )
+      }
+
+
       {/* STATS */}
       <div
         style={{
@@ -149,7 +347,8 @@ function Dashboard() {
             padding: "20px",
             borderRadius: "10px",
             flex: 1,
-            boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+            boxShadow:
+              "0 0 10px rgba(0,0,0,0.1)",
           }}
         >
           <h3>Total Tasks</h3>
@@ -163,7 +362,8 @@ function Dashboard() {
             padding: "20px",
             borderRadius: "10px",
             flex: 1,
-            boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+            boxShadow:
+              "0 0 10px rgba(0,0,0,0.1)",
           }}
         >
           <h3>Completed</h3>
@@ -177,7 +377,8 @@ function Dashboard() {
             padding: "20px",
             borderRadius: "10px",
             flex: 1,
-            boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+            boxShadow:
+              "0 0 10px rgba(0,0,0,0.1)",
           }}
         >
           <h3>Pending</h3>
@@ -189,7 +390,9 @@ function Dashboard() {
 
 
       {/* TASKS */}
-      <h2 style={{ marginBottom: "20px" }}>
+      <h2 style={{
+        marginBottom: "20px",
+      }}>
         Tasks
       </h2>
 
@@ -201,7 +404,8 @@ function Dashboard() {
             padding: "20px",
             borderRadius: "10px",
             marginBottom: "15px",
-            boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+            boxShadow:
+              "0 0 10px rgba(0,0,0,0.1)",
           }}
         >
           <h3>{task.title}</h3>
@@ -220,7 +424,8 @@ function Dashboard() {
                   style={{
                     marginLeft: "10px",
                     color: "red",
-                    fontWeight: "bold",
+                    fontWeight:
+                      "bold",
                   }}
                 >
                   OVERDUE
