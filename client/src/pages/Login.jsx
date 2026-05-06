@@ -4,12 +4,16 @@ import { useNavigate } from "react-router-dom";
 
 function Login() {
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] =
+    useState("");
+
+  const [password, setPassword] =
+    useState("");
 
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
+
     e.preventDefault();
 
     try {
@@ -34,7 +38,7 @@ function Login() {
         JSON.stringify(res.data.user)
       );
 
-      // Redirect to dashboard
+      // Redirect
       navigate("/dashboard");
 
     } catch (error) {
@@ -48,7 +52,8 @@ function Login() {
   return (
     <div
       style={{
-        height: "100vh",
+        minHeight: "100vh",
+        background: "#f4f4f4",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -57,13 +62,25 @@ function Login() {
       <form
         onSubmit={handleLogin}
         style={{
+          background: "white",
+          padding: "40px",
+          borderRadius: "12px",
+          width: "350px",
           display: "flex",
           flexDirection: "column",
-          width: "300px",
-          gap: "10px",
+          gap: "15px",
+          boxShadow:
+            "0 0 15px rgba(0,0,0,0.1)",
         }}
       >
-        <h2>Login</h2>
+        <h1
+          style={{
+            textAlign: "center",
+            marginBottom: "10px",
+          }}
+        >
+          Login
+        </h1>
 
         <input
           type="email"
@@ -72,6 +89,14 @@ function Login() {
           onChange={(e) =>
             setEmail(e.target.value)
           }
+          required
+          style={{
+            padding: "12px",
+            borderRadius: "5px",
+            border:
+              "1px solid #ccc",
+            fontSize: "16px",
+          }}
         />
 
         <input
@@ -79,23 +104,48 @@ function Login() {
           placeholder="Enter password"
           value={password}
           onChange={(e) =>
-            setPassword(e.target.value)
+            setPassword(
+              e.target.value
+            )
           }
+          required
+          style={{
+            padding: "12px",
+            borderRadius: "5px",
+            border:
+              "1px solid #ccc",
+            fontSize: "16px",
+          }}
         />
 
-        <button type="submit">
+        <button
+          type="submit"
+          style={{
+            padding: "12px",
+            background: "black",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            fontSize: "16px",
+            fontWeight: "bold",
+          }}
+        >
           Login
         </button>
+
         <p
           style={{
-          textAlign: "center",
-          cursor: "pointer",
+            textAlign: "center",
+            cursor: "pointer",
+            color: "#555",
           }}
-        onClick={() => navigate("/register")}
-          >
+          onClick={() =>
+            navigate("/register")
+          }
+        >
           Create new account
-          </p>
-          
+        </p>
       </form>
     </div>
   );

@@ -6,21 +6,26 @@ function Register() {
 
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    role: "member",
-  });
+  const [formData, setFormData] =
+    useState({
+      name: "",
+      email: "",
+      password: "",
+    });
 
   const handleChange = (e) => {
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]:
+        e.target.value,
     });
   };
 
-  const handleRegister = async (e) => {
+  const handleRegister = async (
+    e
+  ) => {
+
     e.preventDefault();
 
     try {
@@ -30,7 +35,9 @@ function Register() {
         formData
       );
 
-      alert("Registration Successful");
+      alert(
+        "Registration Successful"
+      );
 
       navigate("/");
 
@@ -38,14 +45,16 @@ function Register() {
 
       console.log(error);
 
-      alert("Registration Failed");
+      alert(
+        "Registration Failed"
+      );
     }
   };
 
   return (
     <div
       style={{
-        height: "100vh",
+        minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -57,17 +66,23 @@ function Register() {
         style={{
           display: "flex",
           flexDirection: "column",
-          width: "320px",
+          width: "350px",
           gap: "15px",
-          padding: "30px",
+          padding: "40px",
           background: "white",
-          borderRadius: "10px",
-          boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+          borderRadius: "12px",
+          boxShadow:
+            "0 0 15px rgba(0,0,0,0.1)",
         }}
       >
-        <h2 style={{ textAlign: "center" }}>
+        <h1
+          style={{
+            textAlign: "center",
+            marginBottom: "10px",
+          }}
+        >
           Register
-        </h2>
+        </h1>
 
         <input
           type="text"
@@ -75,7 +90,13 @@ function Register() {
           placeholder="Enter name"
           onChange={handleChange}
           required
-          style={{ padding: "10px" }}
+          style={{
+            padding: "12px",
+            borderRadius: "5px",
+            border:
+              "1px solid #ccc",
+            fontSize: "16px",
+          }}
         />
 
         <input
@@ -84,7 +105,13 @@ function Register() {
           placeholder="Enter email"
           onChange={handleChange}
           required
-          style={{ padding: "10px" }}
+          style={{
+            padding: "12px",
+            borderRadius: "5px",
+            border:
+              "1px solid #ccc",
+            fontSize: "16px",
+          }}
         />
 
         <input
@@ -93,31 +120,26 @@ function Register() {
           placeholder="Enter password"
           onChange={handleChange}
           required
-          style={{ padding: "10px" }}
+          style={{
+            padding: "12px",
+            borderRadius: "5px",
+            border:
+              "1px solid #ccc",
+            fontSize: "16px",
+          }}
         />
-
-        <select
-          name="role"
-          onChange={handleChange}
-          style={{ padding: "10px" }}
-        >
-          <option value="member">
-            Member
-          </option>
-
-          <option value="admin">
-            Admin
-          </option>
-        </select>
 
         <button
           type="submit"
           style={{
-            padding: "10px",
+            padding: "12px",
             background: "black",
             color: "white",
             border: "none",
+            borderRadius: "5px",
             cursor: "pointer",
+            fontSize: "16px",
+            fontWeight: "bold",
           }}
         >
           Register
@@ -127,10 +149,14 @@ function Register() {
           style={{
             textAlign: "center",
             cursor: "pointer",
+            color: "#555",
           }}
-          onClick={() => navigate("/")}
+          onClick={() =>
+            navigate("/")
+          }
         >
-          Already have an account? Login
+          Already have an account?
+          Login
         </p>
       </form>
     </div>
